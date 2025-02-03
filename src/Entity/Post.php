@@ -3,8 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\PostRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 class Post
@@ -15,29 +16,18 @@ class Post
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
     private ?string $title = null;
 
-    #[ORM\Column(type: "text")]
-    #[Assert\NotBlank]
+    #[ORM\Column(type: 'text')]
     private ?string $content = null;
 
-    #[ORM\Column(type: "datetime")]
-    private ?\DateTimeInterface $createdAt = null;
-
-    #[ORM\Column(type: "datetime", nullable: true)]
-    private ?\DateTimeInterface $updatedAt = null;
-
-    #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: 'posts')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Users $author = null;
-
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'posts')]
-    private ?array $tags = [];
+    #[ORM\JoinTable(name: 'post_tags')]
+    private Collection $tags;
 
     public function __construct()
     {
-        $this->createdAt = new \DateTime();
+        $this->tags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -69,58 +59,18 @@ class Post
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    public function getAuthor(): ?Users
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(Users $author): static
-    {
-        $this->author = $author;
-
-        return $this;
-    }
-
-    public function getTags(): ?array
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTags(): Collection
     {
         return $this->tags;
-    }
-
-    public function setTags(array $tags): static
-    {
-        $this->tags = $tags;
-
-        return $this;
     }
 
     public function addTag(Tag $tag): static
     {
         if (!$this->tags->contains($tag)) {
-            $this->tags[] = $tag;
+            $this->tags->add($tag);
         }
 
         return $this;
