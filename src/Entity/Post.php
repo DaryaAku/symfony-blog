@@ -3,8 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\PostRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
@@ -63,13 +62,13 @@ class Post
     }
 
     public function addTag(Tag $tag): static
-{
-    if (!in_array($tag, $this->tags, true)) {
-        $this->tags[] = $tag->getId();
-    }
+    {
+        if (!in_array($tag, $this->tags, true)) {
+            $this->tags[] = $tag->getId();
+        }
 
-    return $this;
-}
+        return $this;
+    }
 
     public function removeTag(Tag $tag): static
     {

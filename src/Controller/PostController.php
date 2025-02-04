@@ -28,23 +28,13 @@ class PostController extends AbstractController
     {
         $posts = $this->postService->getAllPosts();
     
-        if (!$posts) {
-            $jsonData = $this->serializer->serialize(
-                $posts,
-                'json',
-                [AbstractNormalizer::GROUPS => ['post:read']]
-            );
-    
-            return new JsonResponse(['status' => 'success', 'data' => json_decode($jsonData)], JsonResponse::HTTP_OK);
-        }
-    
-        // Используем Symfony Serializer для конвертации объектов в JSON
-        $jsonPosts = $serializer->serialize($posts, 'json', ['groups' => 'post:read']);
-    
-        return new JsonResponse([
-            'status' => 'success',
-            'data' => json_decode($jsonPosts, true)
-        ], JsonResponse::HTTP_OK);
+        $jsonData = $this->serializer->serialize(
+            $posts,
+            'json',
+            [AbstractNormalizer::GROUPS => ['post:read']]
+        );
+
+        return new JsonResponse(['status' => 'success', 'data' => json_decode($jsonData)], JsonResponse::HTTP_OK);
     }
 
 
@@ -61,9 +51,9 @@ class PostController extends AbstractController
     }
 
     #[Route('/delete/{id}', methods: ['DELETE'])]
-    public function deletePost(Post $post): JsonResponse
+    public function deletePost(int $id): JsonResponse
     {
-        $this->postService->deletePost($post);
+        $this->postService->deletePost($id);
         return $this->json(['message' => 'Post deleted']);
     }
 }

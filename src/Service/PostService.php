@@ -19,14 +19,16 @@ class PostService
 
     public function getAllPosts(): array
     {
-        return $this->postRepository->findAll();
+        $posts = $this->postRepository->findAll();
+
+        return $posts;
     }
 
     public function createPost(string $title, string $content): Post
     {
         $post = new Post();
-        $post->setTitle($title);
-        $post->setContent($content);
+        $post->setTitle($title)
+            ->setContent($content);
 
         $this->entityManager->persist($post);
         $this->entityManager->flush();
@@ -34,9 +36,20 @@ class PostService
         return $post;
     }
 
-    public function deletePost(Post $post): void
-    {
-        $this->entityManager->remove($post);
-        $this->entityManager->flush();
+    public function deletePost(int $id): void
+{
+    $post = $this->postRepository->find($id);
+
+    if (!$post) {
+        throw new \Exception("Post not found");
     }
+
+    $comments = $post->getComments();
+    foreach ($comments as $comment) {
+        $this->entityManager->remove($comment);
+    }
+
+    $this->entityManager->remove($post);
+    $this->entityManager->flush();
+}
 }
