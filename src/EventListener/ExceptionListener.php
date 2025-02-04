@@ -1,3 +1,5 @@
+<?php
+
 namespace App\EventListener;
 
 use Psr\Log\LoggerInterface;

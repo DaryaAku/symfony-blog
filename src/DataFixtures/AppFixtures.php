@@ -19,6 +19,7 @@ class AppFixtures extends Fixture
         $user = new Users();
         $user->setUsername($faker->userName)
             ->setEmail($faker->email)
+            ->addRole('ROLE_USER')
             ->setPassword(password_hash('password', PASSWORD_BCRYPT));
         
         $manager->persist($user);
@@ -27,17 +28,17 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 5; $i++) {
             $tag = new Tag();
             $tag->setName($faker->word);
-            $tags[] = $tag;
             $manager->persist($tag);
+            $manager->flush();
+            $tags[] = $tag;
         }
 
         for ($i = 0; $i < 10; $i++) {
             $post = new Post();
             $post->setTitle($faker->sentence(6))
                 ->setContent($faker->paragraph(4))
-                ->setCreatedAt($faker->dateTimeThisYear)
-                ->setAuthor($user)
-                ->setTags($faker->randomElements($tags, 3));
+                ->addTag($tags[$i % 5])
+                ->addTag($tags[($i + 2) % 5]);
 
             $manager->persist($post);
 

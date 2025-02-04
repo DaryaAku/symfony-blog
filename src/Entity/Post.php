@@ -13,22 +13,20 @@ class Post
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['post:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['post:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: 'text')]
+    #[Groups(['post:read'])]
     private ?string $content = null;
 
-    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'posts')]
-    #[ORM\JoinTable(name: 'post_tags')]
-    private Collection $tags;
-
-    public function __construct()
-    {
-        $this->tags = new ArrayCollection();
-    }
+    #[ORM\Column(type: "json")]
+    #[Groups(['post:read'])]
+    private array $tags = [];
 
     public function getId(): ?int
     {
@@ -59,22 +57,19 @@ class Post
         return $this;
     }
 
-    /**
-     * @return Collection<int, Tag>
-     */
-    public function getTags(): Collection
+    public function getTags(): array
     {
         return $this->tags;
     }
 
     public function addTag(Tag $tag): static
-    {
-        if (!$this->tags->contains($tag)) {
-            $this->tags->add($tag);
-        }
-
-        return $this;
+{
+    if (!in_array($tag, $this->tags, true)) {
+        $this->tags[] = $tag->getId();
     }
+
+    return $this;
+}
 
     public function removeTag(Tag $tag): static
     {

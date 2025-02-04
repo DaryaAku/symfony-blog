@@ -17,17 +17,11 @@ class PostService
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * Получить все посты
-     */
     public function getAllPosts(): array
     {
         return $this->postRepository->findAll();
     }
 
-    /**
-     * Создать новый пост
-     */
     public function createPost(string $title, string $content): Post
     {
         $post = new Post();
@@ -40,9 +34,6 @@ class PostService
         return $post;
     }
 
-    /**
-     * Удалить пост
-     */
     public function deletePost(Post $post): void
     {
         $this->entityManager->remove($post);

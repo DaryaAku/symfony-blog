@@ -18,15 +18,6 @@ class Tag
     #[ORM\Column(length: 255, unique: true)]
     private ?string $name = null;
 
-    // Связь один ко многим с постами
-    #[ORM\OneToMany(mappedBy: 'tags', targetEntity: Post::class)]
-    private Collection $posts;
-
-    public function __construct()
-    {
-        $this->posts = new ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -40,33 +31,6 @@ class Tag
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Post>
-     */
-    public function getPosts(): Collection
-    {
-        return $this->posts;
-    }
-
-    public function addPost(Post $post): static
-    {
-        if (!$this->posts->contains($post)) {
-            $this->posts->add($post);
-            $post->addTag($this);
-        }
-
-        return $this;
-    }
-
-    public function removePost(Post $post): static
-    {
-        if ($this->posts->removeElement($post)) {
-            $post->removeTag($this);
-        }
 
         return $this;
     }

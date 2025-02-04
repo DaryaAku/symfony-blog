@@ -18,8 +18,6 @@ security:
 
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/firmwares, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/firmwares/add, roles: IS_AUTHENTICATED_FULLY }
 
     providers:
         app_user_provider:

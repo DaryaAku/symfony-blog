@@ -1,7 +1,8 @@
-// src/Command/ListUsersCommand.php
+<?php
+
 namespace App\Command;
 
-use App\Entity\User;
+use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,10 +26,10 @@ class ListUsersCommand extends Command
         $this->setDescription('List all users in the system');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Get all users
-        $users = $this->entityManager->getRepository(User::class)->findAll();
+        $users = $this->entityManager->getRepository(Users::class)->findAll();
 
         if (empty($users)) {
             $output->writeln('No users found.');
