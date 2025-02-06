@@ -1,4 +1,57 @@
 # Symfony Docker
+Project Description
+
+Symfony Blog API is a RESTful API built with Symfony that provides functionality for managing blog posts and comments. The API supports creating, editing, deleting, and viewing posts, as well as handling comments.
+
+Technology Stack
+
+Backend: Symfony (PHP)
+
+Database: PostgreSQL
+
+ORM: Doctrine
+
+Authentication: JWT 
+
+Templating: Twig 
+
+Containerization: Docker 
+
+Test: Postman
+Build fresh images: Run docker compose build --no-cache  
+To set up and start a fresh Symfony project: un docker compose up --pull always -d --wait 
+ Installation and Setup
+ Clone the Repository:git clone <REPOSITORY_URL>
+                      cd <PROJECT_NAME>
+  Install Dependencies: composer install
+  Configure Environment Variables: Create a .env.local file and specify database connection parameters:
+  DATABASE_URL="postgresql://user:password@127.0.0.1:5432/db_name"
+  JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
+  JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
+  JWT_PASSPHRASE=your_passphrase  
+  Set Up the Database:php bin/console doctrine:database:create
+                       php bin/console doctrine:migrations:migrate    
+  Generate JWT Keys: php bin/console lexik:jwt:generate-keypair
+
+  API Endpoints
+  Posts:
+  GET /posts – Retrieve all posts 
+  GET /posts/{id} – Retrieve a post by ID
+  POST /posts – Create a post
+  PUT /posts/{id} – Update a post
+  DELETE /posts/{id} – Delete a post    
+
+  Comments:
+  GET /posts/{id}/comments – Retrieve comments for a post
+  POST /posts/{id}/comments – Add a comment
+  DELETE /comments/{id} – Delete a comment
+
+  ClassNotFoundError" for TwigBundle
+  Error: Attempted to load class "TwigBundle" from namespace "Symfony\Bundle\TwigBundle".  
+  Solution: composer require symfony/twig-bundle  
+
+
+
 
 A [Docker](https://www.docker.com/)-based installer and runtime for the [Symfony](https://symfony.com) web framework,
 with [FrankenPHP](https://frankenphp.dev) and [Caddy](https://caddyserver.com/) inside!
